@@ -43,10 +43,6 @@ app.get('/', (req,res) => {
   res.send({message:'hello world'});
 })
 
-app.get('*', (req,res) => {
-  res.send({message:'404! not found'});
-})
-
 
 app.listen(process.env.PORT, function(err){
   if(err) {
