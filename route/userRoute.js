@@ -1,7 +1,5 @@
 const express = require('express');
-const chalk = require('chalk');
-const bcrypt = require('bcryptjs');
-const ensureLogIn = require('connect-ensure-login').ensureLoggedIn;
+const ensureLogIn = require('../auth/ensureHandler');
 const passport = require('../auth/auth');
 const User = require('../model/userModel');
 
@@ -14,13 +12,19 @@ const router = new express.Router();
 
 // require('../auth/auth');
 
+// router.get('/', ensureLoggedIn, (req,res) => {
+//   res.send({
+//     isAuthenticated:true,
+//     user:req.user,
+//   });
+// })
+
 router.get('/', ensureLoggedIn, (req,res) => {
   res.send({
     isAuthenticated:true,
     user:req.user,
   });
 })
-
 
 router.get('/unauthorized_request', (req,res) => {
   if(req.user) {
@@ -56,7 +60,7 @@ router.post('/signup', async (req,res,next) => {
     })
   } catch (e ) {
     console.log(e);
-    console.log(chalk.bgRed(e.message));
+    console.log(e.message);
     res.status(409).send({message:'Sign up Failed! Please try again.', type:'error'});
   }
 })
@@ -80,6 +84,8 @@ router.post('/logout', (req,res,next) => {
     res.status(200).send({message:'Loged out successfully',type:'success'})
   })
 })
+
+
 
 
 

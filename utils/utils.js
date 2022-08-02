@@ -1,4 +1,3 @@
-const chalk = require('chalk');
 const axios = require('axios');
 const History = require('../model/historyModel');
 
@@ -15,7 +14,7 @@ async function get_todays_amount(amount) {
     };
     return result;
   } catch (e) {
-    console.log(chalk.bgRedBright(e.message));
+    console.log(e.message);
     return {amount:0,rate:0};
   }
 }
@@ -29,7 +28,6 @@ async function get_all_todays_amount() {
         all_histories[i].todayAmount = today_amount.amount;
         all_histories[i].todayRate = today_amount.rate;
       }
-      console.log(all_histories[1].todayAmount)
       return all_histories;
     } catch (e) {
       console.log(e);
@@ -38,16 +36,11 @@ async function get_all_todays_amount() {
   }
 }
 
-async function example_func(){
-  return {amount:400,rate:119};
-}
-
 
 
 module.exports = {
   get_all_todays_amount,
   get_todays_amount,
-  example_func
 }
 
 

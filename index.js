@@ -17,6 +17,7 @@ const historyRoute = require('./route/historyRoute');
 
 //express application
 const app = express();
+
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(cors({origin:'*'}))
@@ -41,6 +42,10 @@ app.use('/remitance', historyRoute);
 
 app.get('/', (req,res) => {
   res.send({message:'hello world'});
+})
+
+app.get('/login', (req,res) => {
+  res.send({message:'Welcome to login'});
 })
 
 

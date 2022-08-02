@@ -1,9 +1,8 @@
 const fs = require('fs');
 const express = require('express');
 const { Readable } = require('stream'); 
-const chalk = require('chalk');
 const multer = require('multer');
-const ensureLogIn = require('connect-ensure-login').ensureLoggedIn;
+const ensureLogIn = require('../auth/ensureHandler');
 const { v4: uuidv4 } = require('uuid');
 const History = require('../model/historyModel');
 const {get_todays_amount} = require('../utils/utils');
@@ -13,12 +12,6 @@ const ensureLoggedIn = ensureLogIn({
   responseData:{message:'Please login to view/modify the content of this page!',type:'error'},
 });
 
-
-async function deleteall() {
-  await History.deleteMany();
-}
-
-// deleteall();
 
 const router = new express.Router();
 
@@ -38,7 +31,7 @@ router.get('/all_histories', ensureLoggedIn, async (req,res) => {
     res.status(200).send(histories);
   } catch(e) {
     console.log(e);
-    console.log(chalk.bgRedBright(e.message));
+    console.log(e.message);
     res.status(404).send({error:"Cannot post history details.Please try agan.",type:'error'});
   } 
 })
@@ -60,7 +53,7 @@ router.get('/history/:id', ensureLoggedIn,  async(req,res) => {
     res.status(200).send({history,})
   } catch (e) {
     console.log(e);
-    console.log(chalk.bgRedBright(e.message));
+    console.log(e.message);
     res.status(404).send({error:'Failed to send remitance data.Please try again with valid data'});
   }
 })
@@ -150,7 +143,7 @@ router.delete('/receipt_image/:key', ensureLoggedIn, async (req,res) => {
       type:'success',
     })
   } catch (e) {
-    console.log(chalk.red(e.message));
+    console.log(e.message);
   }
 })
 

@@ -1,4 +1,3 @@
-const chalk = require('chalk');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const bcrypt = require('bcryptjs');
@@ -20,7 +19,7 @@ passport.use(new LocalStrategy({
     return cb(null,user);
   } catch (e) {
     console.log(e);
-    console.log(chalk.bgBlackBright(e.message));
+    console.log(e.message);
     return cb(e);
   }
 }))
