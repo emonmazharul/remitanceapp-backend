@@ -36,6 +36,14 @@ app.use(passport.authenticate('session'));
 app.use('/user',userRoute);
 app.use('/remitance', historyRoute);
 
+app.get('/', (req,res) => {
+  res.send({message:'hello world'});
+})
+
+app.get('*', (req,res) => {
+  res.send({message:'404! not found'});
+})
+
 
 app.listen(process.env.PORT, function(err){
   if(err) {
