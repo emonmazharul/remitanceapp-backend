@@ -5,6 +5,12 @@ const historySchema = new mongoose.Schema({
     type:String,
     required:true,
   },
+  pinNumber:{
+    type:String,
+    required:true,
+    unique:true,
+    minLength:5
+  },
   totalPound: {
     type:Number,
     required:true,
@@ -47,6 +53,7 @@ const historySchema = new mongoose.Schema({
 historySchema.methods.toJSON = function() {
   const historyObject = this.toObject();
   delete historyObject._id;
+  delete historyObject.pinNumber;
   delete historyObject.receiptImage;
   delete historyObject.updatedAt;
   delete historyObject.createdAt;

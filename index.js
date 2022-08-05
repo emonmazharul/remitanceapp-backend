@@ -3,11 +3,11 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 require('./connection/connection');
-const path = require('path');
 const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo');
+// const cors = require('cors');
 
 // created modules;
 const passport = require('./auth/auth');
@@ -16,9 +16,11 @@ const historyRoute = require('./route/historyRoute');
 
 //express application
 const app = express();
-const publicPath = path.join(__dirname, '/public');
 
-app.use(express.static(publicPath));
+
+// const publicPath = path.join(__dirname, '/public');
+// app.use(express.static(publicPath));
+
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(cookieParser());
@@ -40,9 +42,9 @@ app.use(passport.authenticate('session'));
 app.use('/user',userRoute);
 app.use('/remitance', historyRoute);
 
-app.get('*', (req,res) => {
-  res.sendFile(publicPath+'/index.html');
-});
+// app.get('*', (req,res) => {
+//   res.sendFile(publicPath+'/index.html');
+// });
 
 app.listen(process.env.PORT, function(err){
   if(err) {
@@ -50,8 +52,6 @@ app.listen(process.env.PORT, function(err){
   }
   console.log('server running on port ' + process.env.PORT);
 })
-
-console.log('some changes have been made so far')
 
 
 module.exports = app;

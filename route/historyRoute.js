@@ -8,6 +8,11 @@ const History = require('../model/historyModel');
 const {get_todays_amount} = require('../utils/utils');
 const {mock_history} = require('../mock/data');
 
+// History.deleteMany()
+//   .then(res => {
+//     console.log(res);
+//   })
+
 const ensureLoggedIn = ensureLogIn({
   responseData:{message:'Please login to view/modify the content of this page!',type:'error'},
 });
@@ -60,14 +65,15 @@ router.get('/history/:id', ensureLoggedIn,  async(req,res) => {
 
 
 router.post('/history', ensureLoggedIn,  upload.single('avatar'), async (req,res) => {
+
   if(req.user.email !== process.env.ADMIN_EMAIL) {
     return res.status(401).send({
-      message:'Your are not allowed to view the content of this page',
+      message:'Your are not allowed to view/modify/upload the content of this page',
       type:'error',
     })
   }
 
-  const {totalPound,totalTaka,sendingDate,exchangeRate,payingAgent,govtIncentive} = req.body;
+  const {totalPound,totalTaka,sendingDate,exchangeRate,payingAgent,govtIncentive,pinNumber} = req.body;
   if(!req.file) {
     return res.status(406).send({
       message:'Please upload a receipt image too for a successfull entry!',
@@ -77,12 +83,13 @@ router.post('/history', ensureLoggedIn,  upload.single('avatar'), async (req,res
   try {
     const history = new History({
       key:uuidv4(),
-      totalPound,
-      totalTaka,
+      pinNumber:pinNumber,
+      totalPound:parseInt(totalPound),
+      totalTaka:parseInt(totalTaka),
       sendingDate,
-      exchangeRate,
+      exchangeRate:parseInt(exchangeRate),
       payingAgent,
-      govtIncentive,
+      govtIncentive:parseInt(govtIncentive)
     });
     
     history.receiptImage = req.file.buffer;
@@ -90,8 +97,9 @@ router.post('/history', ensureLoggedIn,  upload.single('avatar'), async (req,res
     res.status(201).send(history);
   } catch (e) {
     console.log(e);
+    console.log(e);
     res.status(406).send({
-      message:'Please fill up all the necessary information field!',
+      message:'Please submit all ther required information and always check weather pin number is unique or not',
       type:'error'
     })
   }
@@ -100,7 +108,7 @@ router.post('/history', ensureLoggedIn,  upload.single('avatar'), async (req,res
 
 router.get('/receipt_image/:key', ensureLoggedIn , async (req,res) => {
     if(req.user.email !== process.env.ADMIN_EMAIL) {
-      res.status(404);
+      res.status(401);
       fs.createReadStream('./img/receipt-sample.png').pipe(res);
       return;
     }
