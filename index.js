@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 require('./connection/connection');
+const path = require('path');
 const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
@@ -18,12 +19,12 @@ const historyRoute = require('./route/historyRoute');
 const app = express();
 
 
-// const publicPath = path.join(__dirname, '/public');
-// app.use(express.static(publicPath));
+const publicPath = path.join(__dirname, '/public');
 
+app.use(express.static(publicPath));
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
-app.use(cors({origin:['https://remitanceapp-frontend-4kiffv9sz-emonmazharul.vercel.app', 'http://localhost:3000']}));
+// app.use(cors({origin:}));
 app.use(cookieParser());
 app.use(session({
   secret:process.env.SESSION_SECRET,
@@ -43,9 +44,9 @@ app.use(passport.authenticate('session'));
 app.use('/user',userRoute);
 app.use('/remitance', historyRoute);
 
-// app.get('*', (req,res) => {
-//   res.sendFile(publicPath+'/index.html');
-// });
+app.get('*', (req,res) => {
+  res.sendFile(publicPath+'/index.html');
+});
 
 app.listen(process.env.PORT, function(err){
   if(err) {
