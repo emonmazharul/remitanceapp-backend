@@ -7,7 +7,7 @@ const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo');
-// const cors = require('cors');
+const cors = require('cors');
 
 // created modules;
 const passport = require('./auth/auth');
@@ -23,6 +23,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
+app.use(cors({origin:['https://remitanceapp-frontend-4kiffv9sz-emonmazharul.vercel.app', 'http://localhost:3000']}));
 app.use(cookieParser());
 app.use(session({
   secret:process.env.SESSION_SECRET,
