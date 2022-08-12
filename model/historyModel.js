@@ -52,6 +52,7 @@ const historySchema = new mongoose.Schema({
 
 historySchema.methods.toJSON = function() {
   const historyObject = this.toObject();
+  historyObject.sendingDate = new Date(historyObject.sendingDate).toDateString();
   delete historyObject._id;
   delete historyObject.pinNumber;
   delete historyObject.receiptImage;
